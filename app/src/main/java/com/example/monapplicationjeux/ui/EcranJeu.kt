@@ -24,7 +24,7 @@ import com.example.monapplicationjeux.model.EtatPartie
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun EcranJeu(onReglesClick: () -> Unit) {
+fun EcranJeu(onReglesClick: () -> Unit, onTousJoueursVus: () -> Unit) {
 
     val joueurs = EtatPartie.joueurs
     var indexJoueurActuel by remember { mutableIntStateOf(0) }
@@ -62,7 +62,9 @@ fun EcranJeu(onReglesClick: () -> Unit) {
                     .padding(innerPadding),
                 contentAlignment = Alignment.Center
             ) {
-                Text("Tous les joueurs ont vu leur mot. Phase de vote à venir.")
+                Button(onClick = onTousJoueursVus) {
+                    Text("Passer au vote")
+                }
             }
             return@Scaffold
         }

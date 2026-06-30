@@ -5,6 +5,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.monapplicationjeux.logic.ResultatPartie
 import com.example.monapplicationjeux.logic.distribuerRoles
 import com.example.monapplicationjeux.model.EtatPartie
 import com.example.monapplicationjeux.model.Joueur
@@ -29,18 +30,32 @@ fun NavigationApp(modifier: Modifier = Modifier) {
                     Joueur(nom = nom.ifBlank { "Joueur ${index + 1}" })
                 }
                 val joueursAvecRoles = distribuerRoles(joueurs, nombreUndercover)
-
-                // Pour l'instant on stocke juste dans une variable globale temporaire
-                // (on améliorera ça à l'étape suivante)
                 EtatPartie.joueurs = joueursAvecRoles
-
                 navController.navigate("jeu")
             })
         }
         composable("jeu") {
-            EcranJeu(onReglesClick = {
-                navController.navigate("regles")
+            EcranJeu(
+                onReglesClick = { navController.navigate("regles") },
+                onTousJoueursVus = { navController.navigate("vote") }
+            )
+        }
+        composable("vote") {
+            EcranVote(onPartieTerminee = { resultat ->
+                navController.navigate("victoire/${resultat.name}")
             })
+        }
+        composable("victoire/{resultat}") { backStackEntry ->
+            val resultatText = backStackEntry.arguments?.getString("resultat") ?: "EN_COURS"
+            val resultat = ResultatPartie.valueOf(resultatText)
+            EcranVictoire(
+                resultat = resultat,
+                onRejouerClick = {
+                    navController.navigate("accueil") {
+                        popUpTo("accueil") { inclusive = true }
+                    }
+                }
+            )
         }
         composable("regles") {
             EcranRegles(onRetourClick = {
