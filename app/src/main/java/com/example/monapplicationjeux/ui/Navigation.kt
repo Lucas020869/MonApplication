@@ -31,6 +31,7 @@ fun NavigationApp(modifier: Modifier = Modifier) {
                 }
                 val joueursAvecRoles = distribuerRoles(joueurs, nombreUndercover)
                 EtatPartie.joueurs = joueursAvecRoles
+                EtatPartie.nombreUndercover = nombreUndercover
                 navController.navigate("jeu")
             })
         }
@@ -41,16 +42,29 @@ fun NavigationApp(modifier: Modifier = Modifier) {
             )
         }
         composable("vote") {
-            EcranVote(onPartieTerminee = { resultat ->
-                navController.navigate("victoire/${resultat.name}")
-            })
+            EcranVote(
+                onReglesClick = { navController.navigate("regles") },
+                onPartieTerminee = { resultat ->
+                    navController.navigate("victoire/${resultat.name}")
+                }
+            )
         }
         composable("victoire/{resultat}") { backStackEntry ->
             val resultatText = backStackEntry.arguments?.getString("resultat") ?: "EN_COURS"
             val resultat = ResultatPartie.valueOf(resultatText)
             EcranVictoire(
                 resultat = resultat,
-                onRejouerClick = {
+                onRejouerMemesJoueursClick = {
+                    val nomsJoueurs = EtatPartie.joueurs.map { it.nom }
+                    val nouveauxJoueurs = nomsJoueurs.map { nom -> Joueur(nom = nom) }
+                    val joueursAvecRoles = distribuerRoles(nouveauxJoueurs, EtatPartie.nombreUndercover)
+                    EtatPartie.joueurs = joueursAvecRoles
+
+                    navController.navigate("jeu") {
+                        popUpTo("accueil") { inclusive = false }
+                    }
+                },
+                onAccueilClick = {
                     navController.navigate("accueil") {
                         popUpTo("accueil") { inclusive = true }
                     }

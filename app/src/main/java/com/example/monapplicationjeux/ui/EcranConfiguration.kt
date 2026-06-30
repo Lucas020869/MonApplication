@@ -1,5 +1,6 @@
 package com.example.monapplicationjeux.ui
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -18,6 +19,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 
 @Composable
@@ -37,8 +39,16 @@ fun EcranConfiguration(onDemarrerClick: (List<String>, Int) -> Unit) {
             .fillMaxSize()
             .padding(16.dp)
     ) {
-        Text("Nombre de joueurs")
-        Row(verticalAlignment = Alignment.CenterVertically) {
+        Text(
+            "Nombre de joueurs",
+            modifier = Modifier.fillMaxWidth(),
+            textAlign = TextAlign.Center
+        )
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
             Button(onClick = {
                 if (nombreJoueurs > 3) {
                     nombreJoueurs--
@@ -57,8 +67,16 @@ fun EcranConfiguration(onDemarrerClick: (List<String>, Int) -> Unit) {
             }
         }
 
-        Text("Nombre d'undercovers", modifier = Modifier.padding(top = 16.dp))
-        Row(verticalAlignment = Alignment.CenterVertically) {
+        Text(
+            "Nombre d'undercovers",
+            modifier = Modifier.fillMaxWidth(),
+            textAlign = TextAlign.Center
+        )
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
             Button(onClick = {
                 if (nombreUndercover > 1) nombreUndercover--
             }) {
@@ -72,7 +90,7 @@ fun EcranConfiguration(onDemarrerClick: (List<String>, Int) -> Unit) {
             }
         }
 
-        Text("Noms des joueurs", modifier = Modifier.padding(top = 16.dp))
+        Text("Noms des joueurs", modifier = Modifier.fillMaxWidth(), textAlign = TextAlign.Center)
         LazyColumn(modifier = Modifier.weight(1f)) {
             items(nomsJoueurs.size) { index ->
                 OutlinedTextField(
