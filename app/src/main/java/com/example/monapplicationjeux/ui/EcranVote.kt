@@ -34,7 +34,7 @@ fun EcranVote(onReglesClick: () -> Unit, onPartieTerminee: (ResultatPartie) -> U
     var joueurs by remember { mutableStateOf(EtatPartie.joueurs) }
     var joueurElimine by remember { mutableStateOf<Joueur?>(null) }
 
-    val joueursEnVie = joueurs.filter { !it.estElimine }
+    val joueursEnVie = joueurs.filter { !it.estElimine }.shuffled()
 
     Scaffold(
         topBar = {

@@ -26,7 +26,7 @@ import com.example.monapplicationjeux.model.EtatPartie
 @Composable
 fun EcranJeu(onReglesClick: () -> Unit, onTousJoueursVus: () -> Unit) {
 
-    val joueurs = EtatPartie.joueurs
+    val joueurs = remember { EtatPartie.joueurs.shuffled() }
     var indexJoueurActuel by remember { mutableIntStateOf(0) }
     var motVisible by remember { mutableStateOf(false) }
 

@@ -12,6 +12,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.monapplicationjeux.logic.ResultatPartie
+import com.example.monapplicationjeux.model.EtatPartie
+import com.example.monapplicationjeux.model.Role
 
 @Composable
 fun EcranVictoire(
@@ -26,6 +28,16 @@ fun EcranVictoire(
         ResultatPartie.EN_COURS -> "Partie en cours"
     }
 
+    val roleGagnant = when (resultat) {
+        ResultatPartie.VICTOIRE_CIVILS -> Role.CIVIL
+        ResultatPartie.VICTOIRE_UNDERCOVER -> Role.UNDERCOVER
+        ResultatPartie.EN_COURS -> null
+    }
+
+    val nomsGagnants = EtatPartie.joueurs
+        .filter { it.role == roleGagnant }
+        .map { it.nom }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -36,6 +48,12 @@ fun EcranVictoire(
         Text(
             text = texteResultat,
             style = MaterialTheme.typography.headlineLarge
+        )
+
+        Text(
+            text = nomsGagnants.joinToString(", "),
+            style = MaterialTheme.typography.bodyLarge,
+            modifier = Modifier.padding(top = 16.dp)
         )
 
         Button(
